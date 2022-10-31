@@ -1,0 +1,407 @@
+package NewCollection;
+
+
+import org.testng.annotations.Test;
+import com.aventstack.extentreports.Status;
+import files.Baseclass;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+
+
+public class NegativeTestcases extends Baseclass {
+
+	protected static String categoryID;
+	protected static String BillerID;
+	String MobNo="       ";
+	String LpgId="       ";
+	String CustomerEmail="       ";
+	protected static String context;
+	protected static String CustomerName;
+	protected static String Amount;
+	protected static String TranId;
+	protected static String TranStatus;
+
+	@Test(priority=1)
+	public void GetCategoryListWithoutLimit() {
+
+		testcase=extentReport.createTest("1. Get - List Category with invalid limit value");
+		String InvalidLimmit="5yyfgy7687gv";
+		int ExpCod=401;
+		
+		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
+				.basic("public key", "private key")
+				.queryParam("limit", InvalidLimmit);
+		testcase.log(Status.INFO, "Passing Invalid Limit "+InvalidLimmit+" in URI");
+
+
+		Response response = httpRequest.get("api/v1/categories");
+	
+		int statusCode = response.getStatusCode();
+		testcase.log(Status.INFO, "Expected status code is: "+ExpCod+" as it is unauthorized.");
+		testcase.log(Status.INFO, "Actual Status Code which received is: "+statusCode);
+		if(ExpCod==statusCode) {
+			testcase.log(Status.PASS, "Got Expected status code");
+
+		}
+		else
+			testcase.log(Status.FAIL, " Failed to get expected status code");
+
+	}
+
+	@Test(priority=2)
+	public void GetCategoryListWithoutAuth() {
+
+		testcase=extentReport.createTest("2. Get - List Category with with no authentication credentials");
+
+		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		RequestSpecification httpRequest = RestAssured.given().log().all()
+				.queryParam("limit", "5yyfgy7687gv");
+
+		testcase.log(Status.INFO, "Requesting Category list without passing basic auth credentials");
+
+		Response response = httpRequest.get("api/v1/categories");
+		int ExpCod=401;
+		int statusCode = response.getStatusCode();
+		testcase.log(Status.INFO, "Expected status code is: "+ExpCod+" as it is unauthorized.");
+		testcase.log(Status.INFO, "Actual Status Code which received is: "+statusCode);
+		if(ExpCod==statusCode) {
+			testcase.log(Status.PASS, "Got Expected status code");
+
+		}
+		else
+			testcase.log(Status.FAIL, "Failed to get expected status code");
+
+
+	}
+
+	@Test(priority=3)
+	public void GetCategoryListWithInvalidPrivateKey() {
+
+		testcase=extentReport.createTest("3. Get - List Category with with invalid private key");
+		String InvalidPrivateKey="bbpssk_live_yov8pQmlNBDuDDpR1lvfV6Inb0ErzrHvChmxzGRea";
+		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
+				.basic("public key", InvalidPrivateKey)
+				.queryParam("limit", "5yyfgy7687gv");
+
+		testcase.log(Status.INFO, "Requesting Category list with invalid private key "+InvalidPrivateKey+".");
+
+		Response response = httpRequest.get("api/v1/categories");
+		int ExpCod=401;
+		int statusCode = response.getStatusCode();
+		testcase.log(Status.INFO, "Expected status code is: "+ExpCod+" as it is unauthorized.");
+		testcase.log(Status.INFO, "Actual Status Code which received is: "+statusCode);
+		if(ExpCod==statusCode) {
+			testcase.log(Status.PASS, "Got Expected status code");
+
+		}
+		else
+			testcase.log(Status.FAIL, "Failed to get expected status code");
+
+
+	}
+	@Test(priority=4)
+	public void GetCategoryListWithInvalidPublicKey() {
+
+		testcase=extentReport.createTest("4. Get - List Category with with invalid public key");
+		String InvalidPublicKey="bbpspk_live_moWg4gcbvDFNa";
+		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
+				.basic(InvalidPublicKey, "private key")
+				.queryParam("limit", "5yyfgy7687gv");
+		testcase.log(Status.INFO, "Requesting Category list with invalid public key"+InvalidPublicKey+".");
+
+
+		Response response = httpRequest.get("api/v1/categories");
+		int ExpCod=401;
+		int statusCode = response.getStatusCode();
+		testcase.log(Status.INFO, "Expected status code is: "+ExpCod+" as it is unauthorized.");
+		testcase.log(Status.INFO, "Actual Status Code which received is: "+statusCode);
+		if(ExpCod==statusCode) {
+			testcase.log(Status.PASS, "Got Expected status code");
+
+		}
+		else
+			testcase.log(Status.FAIL, "Failed to get expected status code");
+
+	}
+
+	@Test(priority=5)
+	public void GetBillersWithInvalidCategoryId() {
+
+		testcase=extentReport.createTest("5. Get - Billers by invalid category Id");
+		String InvalidCatId="RocJSPCAd";
+		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
+				.basic("public key", "private key")
+				.queryParam("limit", "5");
+		testcase.log(Status.INFO, "Requesting Billers with invalid category Id "+InvalidCatId+".");
+
+		Response response = httpRequest.get("api/v1/billers/{categoryID}",InvalidCatId);
+		int ExpCod=400;
+		int statusCode = response.getStatusCode();
+		testcase.log(Status.INFO, "Expected status code is: "+ExpCod+" as resource exist but input wrong.");
+		testcase.log(Status.INFO, "Actual Status Code which received is: "+statusCode);
+		if(ExpCod==statusCode) {
+			testcase.log(Status.PASS, "Got Expected status code");
+
+		}
+		else
+			testcase.log(Status.FAIL, "Failed to get expected status code");
+
+
+
+
+	}
+	@Test(priority=6)
+	public void GetBillersByEmptyCategoryId() {
+
+		testcase=extentReport.createTest("6. Get - Billers by empty category Id");
+
+		RestAssured.baseURI = "https://bpapi.ippopay.com";
+
+		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
+				.basic("public key", "private key")
+				.queryParam("limit", "5");
+		testcase.log(Status.INFO, "Requesting Billers with passing empty Category Id");
+
+		Response response = httpRequest.get("api/v1/billers/{categoryID}","   ");
+		int ExpCod=404;
+		int statusCode = response.getStatusCode();
+		testcase.log(Status.INFO, "Expected status code is: "+ExpCod+" as resource is not exist.");
+		testcase.log(Status.INFO, "Actual Status Code which received is: "+statusCode);
+		if(ExpCod==statusCode) {
+			testcase.log(Status.PASS, "Got Expected status code");
+
+		}
+		else {
+			testcase.log(Status.FAIL, "Failed to get expected status code");
+
+		}
+
+
+	}
+
+	@Test(priority=7)
+	public void GetBillersByInvalidBillerId() {
+
+		testcase=extentReport.createTest("7. Get - Biller fields by invalid Biller Id");
+		String InvalidBillerId="vClH8fh3oo";
+		RestAssured.baseURI = "https://bpapi.ippopay.com";
+
+		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
+				.basic("public key", "private key").contentType(ContentType.JSON).header("Content-Type","application/json").body("{\r\n"+"\"category_id\":\""+categoryID+"\",\r\n"
+						+ "\"biller_id\":\""+InvalidBillerId+"\"\r\n"+ "}")
+				.queryParam("limit", "5");
+		testcase.log(Status.INFO, "Requesting Billers with invalid Biller Id "+InvalidBillerId+".");
+
+		Response response = httpRequest.post("api/v1/billers/biller-fields");
+
+		int ExpCod=422;//syntactically correct but content invalid
+		int statusCode = response.getStatusCode();
+		testcase.log(Status.INFO, "Expected status code is: "+ExpCod+" as syntactically correct but content(Category Id) invalid");
+		testcase.log(Status.INFO, "Actual Status Code which received is: "+statusCode);
+		if(ExpCod==statusCode) {
+			testcase.log(Status.PASS, "Got Expected status code");
+
+		}
+		else {
+			testcase.log(Status.FAIL, "Failed to get expected status code");
+
+
+
+		}
+
+	}
+
+	@Test(priority=8)
+	public void GetBillerDetailsWithEmptyCatId() {
+
+		testcase=extentReport.createTest("8. Get - Biller Details by Empty Category Id");
+
+		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
+				.basic("public key", "private key").contentType(ContentType.JSON).header("Content-Type","application/json").body("{\r\n"+"\"category_id\":\""+"  "+"\",\r\n"
+						+ "\"biller_id\":\""+BillerID+"\"\r\n"+ "}")
+				.queryParam("limit", "5");
+
+		testcase.log(Status.INFO, "Requesting Biller details without passing Category Id");
+
+		Response response = httpRequest.post("api/v1/billers/biller-details");
+		int ExpCod=422;//syntactcally correct but content invalid
+		int statusCode = response.getStatusCode();
+		testcase.log(Status.INFO, "Expected status code is: "+ExpCod+" as syntactically correct but content(Category Id) invalid");
+		testcase.log(Status.INFO, "Actual Status Code which received is: "+statusCode);
+		if(ExpCod==statusCode) {
+			testcase.log(Status.PASS, "Got Expected status code");
+
+		}
+		else {
+			testcase.log(Status.FAIL, "Failed to get expected status code");
+		}
+
+
+	}
+
+	@Test(priority=9)
+	public void BillFetchReqWithoutCatId() throws InterruptedException {
+		
+		testcase=extentReport.createTest("9. POST - Bill fetch Request without Category Id");
+
+		RestAssured.baseURI = "https://bpapi.ippopay.com";
+
+		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
+				.basic("public key", "private key").contentType(ContentType.JSON).header("Content-Type","application/json")
+				.body("    {\n"+ "        \"category_id\": \""+"  "+"\",\n"+ "        \"biller_id\": \""+BillerID+"\",\n"+ "        \"mobile_number\": \""+MobNo+"\",\n"+ "        \"customer_params\":\n"+ "        [\n"+ "            {\n"+ "                \"name\": \"Registered Contact Number\",\n"+ "                \"value\": \""+MobNo+"\"\n"+ "            },\n"+ "            {\n"+ "                \"name\": \"LPG ID\",\n"+ "                \"value\": \""+LpgId+"\"\n"+ "            }\n"+ "        ]           \n"+ "    }")
+				.queryParam("limit", "5");
+
+		testcase.log(Status.INFO, "Bill fetch req without passing Category Id");
+
+		Response response = httpRequest.post("api/v1/billers/biller-details");
+		int ExpCod=422;//syntactcally correct but content invalid
+		int statusCode = response.getStatusCode();
+		testcase.log(Status.INFO, "Expected status code is: "+ExpCod+" as content(category id) invalid.");
+		testcase.log(Status.INFO, "Actual Status Code which received is: "+statusCode);
+		if(ExpCod==statusCode) {
+			testcase.log(Status.PASS, "Got Expected status code");
+
+		}
+		else {
+			testcase.log(Status.FAIL," Failed to get expected status code");
+
+
+
+		}
+
+	}
+
+	@Test(priority=10)
+	public void BillFetchReqInvalidMobNo() throws InterruptedException {
+		testcase=extentReport.createTest("10. Post - Bill fetch Request with Invalid mobile number");
+		String InvalidMobNo="8248647995672687";
+		RestAssured.baseURI = "https://bpapi.ippopay.com";
+
+		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
+				.basic("public key", "private key").contentType(ContentType.JSON).header("Content-Type","application/json")
+				.body("    {\n"+ "        \"category_id\": \""+categoryID+"\",\n"+ "        \"biller_id\": \""+BillerID+"\",\n"+ "        \"mobile_number\": \""+InvalidMobNo+"\",\n"+ "        \"customer_params\":\n"+ "        [\n"+ "            {\n"+ "                \"name\": \"Registered Contact Number\",\n"+ "                \"value\": \""+MobNo+"\"\n"+ "            },\n"+ "            {\n"+ "                \"name\": \"LPG ID\",\n"+ "                \"value\": \""+LpgId+"\"\n"+ "            }\n"+ "        ]           \n"+ "    }")
+				.queryParam("limit", "5");
+		testcase.log(Status.INFO, "Bill fetch req with invalid mobile number "+InvalidMobNo+".");
+
+
+		Response response = httpRequest.post("api/v1/billers/biller-details");
+		int ExpCod=422;//syntactcally correct but content invalid
+		int statusCode = response.getStatusCode();
+		testcase.log(Status.INFO, "Expected status code is: "+ExpCod+" as mobile number is invalid.");
+		testcase.log(Status.INFO, "Actual Status Code which received is: "+statusCode);	
+		if(ExpCod==statusCode) {
+			testcase.log(Status.PASS, "Got Expected status code");
+
+		}
+		else {
+			testcase.log(Status.FAIL, "Expected status code is: "+ExpCod+" as content(mobile no) invalid."+" Failed to get expected status code");
+
+
+
+		}
+
+	}
+
+	@Test(priority=11)
+	public void BillFetchReqWithoutMobNo() throws InterruptedException {
+		testcase=extentReport.createTest("11. Post - Bill fetch Request without mobile number");
+		RestAssured.baseURI = "https://bpapi.ippopay.com";
+
+		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
+				.basic("public key", "private key").contentType(ContentType.JSON).header("Content-Type","application/json")
+				.body("    {\n"+ "        \"category_id\": \""+categoryID+"\",\n"+ "        \"biller_id\": \""+BillerID+"\",\n"+ "        \"mobile_number\": \""+" "+"\",\n"+ "        \"customer_params\":\n"+ "        [\n"+ "            {\n"+ "                \"name\": \"Registered Contact Number\",\n"+ "                \"value\": \""+MobNo+"\"\n"+ "            },\n"+ "            {\n"+ "                \"name\": \"LPG ID\",\n"+ "                \"value\": \""+LpgId+"\"\n"+ "            }\n"+ "        ]           \n"+ "    }")
+				.queryParam("limit", "5");
+
+		testcase.log(Status.INFO, "Bill fetch req without passing mobile number.");
+
+		Response response = httpRequest.post("api/v1/billers/biller-details");
+		int ExpCod=422;//syntactcally correct but content invalid
+		int statusCode = response.getStatusCode();
+		testcase.log(Status.INFO, "Expected status code is: "+ExpCod+" as content(mobile number) is empty.");
+		testcase.log(Status.INFO, "Actual Status Code which received is: "+statusCode);	
+		if(ExpCod==statusCode) {
+			testcase.log(Status.PASS, "Got Expected status code");
+
+		}
+		else {
+			testcase.log(Status.FAIL, "Failed to get expected status code");
+
+
+
+		}
+
+	}
+
+	@Test(priority=12)
+	public void BillFetchReqLpgIdWithSapce() throws InterruptedException {
+		testcase=extentReport.createTest("12. Post - Bill fetch Request with invalid LPG Id");
+		String InvalidLpgId="10000000107608599     ";
+		RestAssured.baseURI = "https://bpapi.ippopay.com";
+
+		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
+				.basic("public key", "private key").contentType(ContentType.JSON).header("Content-Type","application/json")
+				.body("    {\n"+ "        \"category_id\": \""+categoryID+"\",\n"+ "        \"biller_id\": \""+BillerID+"\",\n"+ "        \"mobile_number\": \""+" "+"\",\n"+ "        \"customer_params\":\n"+ "        [\n"+ "            {\n"+ "                \"name\": \"Registered Contact Number\",\n"+ "                \"value\": \""+MobNo+"\"\n"+ "            },\n"+ "            {\n"+ "                \"name\": \"LPG ID\",\n"+ "                \"value\": \""+InvalidLpgId+"\"\n"+ "            }\n"+ "        ]           \n"+ "    }")
+				.queryParam("limit", "5");
+		
+		testcase.log(Status.INFO, "Bill fetch req without passing LPG id with space "+InvalidLpgId+".");
+
+
+		Response response = httpRequest.post("api/v1/billers/biller-details");
+		int ExpCod=422;//syntactcally correct but content invalid
+		int statusCode = response.getStatusCode();
+		testcase.log(Status.INFO, "Expected status code is: "+ExpCod+" as content(Lpg id) is invalid.");
+		testcase.log(Status.INFO, "Actual Status Code which received is: "+statusCode);	
+		if(ExpCod==statusCode) {
+			testcase.log(Status.PASS, "Got Expected status code");
+
+		}
+		else {
+			testcase.log(Status.FAIL, "Failed to get expected status code");
+
+
+
+		}
+
+	}
+
+	@Test(priority=13)
+	public void CollectUpiWithInvalidTransId() throws InterruptedException {
+		testcase=extentReport.createTest("13. Post - Collect UPI payment with invalid Transaction Id");
+		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		String Vpa="devibalakrishnan67@okaxis";
+		String InvalidTransactionId="Lm6a0avYODMjL3ZoO3Vg";
+
+		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
+				.basic("public key", "private key")
+				.contentType(ContentType.JSON).header("Content-Type","application/json").body("{\n"
+						+ "    \"vpa\": \""+Vpa+"\"\n"
+						+ "}").queryParam("limit", "5");
+		testcase.log(Status.INFO, "Collect Upi payment by passing invalid Transaction Id "+InvalidTransactionId+".");
+
+
+		Response response = httpRequest.post("api/v1/transactions/process/order/{transaction_id}/upi_collect",InvalidTransactionId);
+		int ExpCod=400;//bad request
+		int statusCode = response.getStatusCode();
+		testcase.log(Status.INFO, "Expected status code is: "+ExpCod+" as it is bad request.");
+		testcase.log(Status.INFO, "Actual Status Code which received is: "+statusCode);	
+		if(ExpCod==statusCode) {
+			testcase.log(Status.PASS, "Got Expected status code");
+
+		}
+		else {
+			testcase.log(Status.FAIL, "Failed to get expected status code");
+
+
+
+		}extentReport.flush();
+
+	}
+
+}
