@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Api" parallel="false">
+	<!--test thread-count="5" name="Api"> -->
+<listeners>
+<listener class-name="files.MyListener"/>
+</listeners>
+	<test name="Payer API copy - Positive Scenario">
+		<classes>
+			<class name="NewCollection.PayerAPIsCopy" />
+<!-- </classes>
+		
+	</test>
+
+	<test name="Payer API copy - Negative Scenario">
+		<classes>  -->
+			<class name="NewCollection.NegativeTestcases" />
+		</classes>
+	</test> <!-- Api -->
+</suite> 
