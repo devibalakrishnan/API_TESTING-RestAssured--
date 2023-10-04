@@ -30,7 +30,7 @@ public class NegativeTestcases extends Baseclass {
 		String InvalidLimmit="5yyfgy7687gv";
 		int ExpCod=401;
 		
-		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		RestAssured.baseURI = "https://bpapi.com";
 		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
 				.basic("public key", "private key")
 				.queryParam("limit", InvalidLimmit);
@@ -56,7 +56,7 @@ public class NegativeTestcases extends Baseclass {
 
 		testcase=extentReport.createTest("2. Get - List Category with with no authentication credentials");
 
-		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		RestAssured.baseURI = "https://bpapi.com";
 		RequestSpecification httpRequest = RestAssured.given().log().all()
 				.queryParam("limit", "5yyfgy7687gv");
 
@@ -81,8 +81,8 @@ public class NegativeTestcases extends Baseclass {
 	public void GetCategoryListWithInvalidPrivateKey() {
 
 		testcase=extentReport.createTest("3. Get - List Category with with invalid private key");
-		String InvalidPrivateKey="bbpssk_live_yov8pQmlNBDuDDpR1lvfV6Inb0ErzrHvChmxzGRea";
-		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		String InvalidPrivateKey="@@@@@@";
+		RestAssured.baseURI = "https://bpapi.com";
 		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
 				.basic("public key", InvalidPrivateKey)
 				.queryParam("limit", "5yyfgy7687gv");
@@ -107,8 +107,8 @@ public class NegativeTestcases extends Baseclass {
 	public void GetCategoryListWithInvalidPublicKey() {
 
 		testcase=extentReport.createTest("4. Get - List Category with with invalid public key");
-		String InvalidPublicKey="bbpspk_live_moWg4gcbvDFNa";
-		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		String InvalidPublicKey="@@@@@@@";
+		RestAssured.baseURI = "https://bpapi.com";
 		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
 				.basic(InvalidPublicKey, "private key")
 				.queryParam("limit", "5yyfgy7687gv");
@@ -134,7 +134,7 @@ public class NegativeTestcases extends Baseclass {
 
 		testcase=extentReport.createTest("5. Get - Billers by invalid category Id");
 		String InvalidCatId="RocJSPCAd";
-		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		RestAssured.baseURI = "https://bpapi.com";
 		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
 				.basic("public key", "private key")
 				.queryParam("limit", "5");
@@ -161,7 +161,7 @@ public class NegativeTestcases extends Baseclass {
 
 		testcase=extentReport.createTest("6. Get - Billers by empty category Id");
 
-		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		RestAssured.baseURI = "https://bpapi.com";
 
 		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
 				.basic("public key", "private key")
@@ -190,7 +190,7 @@ public class NegativeTestcases extends Baseclass {
 
 		testcase=extentReport.createTest("7. Get - Biller fields by invalid Biller Id");
 		String InvalidBillerId="vClH8fh3oo";
-		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		RestAssured.baseURI = "https://bpapi.com";
 
 		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
 				.basic("public key", "private key").contentType(ContentType.JSON).header("Content-Type","application/json").body("{\r\n"+"\"category_id\":\""+categoryID+"\",\r\n"
@@ -222,7 +222,7 @@ public class NegativeTestcases extends Baseclass {
 
 		testcase=extentReport.createTest("8. Get - Biller Details by Empty Category Id");
 
-		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		RestAssured.baseURI = "https://bpapi.com";
 		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
 				.basic("public key", "private key").contentType(ContentType.JSON).header("Content-Type","application/json").body("{\r\n"+"\"category_id\":\""+"  "+"\",\r\n"
 						+ "\"biller_id\":\""+BillerID+"\"\r\n"+ "}")
@@ -251,7 +251,7 @@ public class NegativeTestcases extends Baseclass {
 		
 		testcase=extentReport.createTest("9. POST - Bill fetch Request without Category Id");
 
-		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		RestAssured.baseURI = "https://bpapi.com";
 
 		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
 				.basic("public key", "private key").contentType(ContentType.JSON).header("Content-Type","application/json")
@@ -282,7 +282,7 @@ public class NegativeTestcases extends Baseclass {
 	public void BillFetchReqInvalidMobNo() throws InterruptedException {
 		testcase=extentReport.createTest("10. Post - Bill fetch Request with Invalid mobile number");
 		String InvalidMobNo="8248647995672687";
-		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		RestAssured.baseURI = "https://bpapi.com";
 
 		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
 				.basic("public key", "private key").contentType(ContentType.JSON).header("Content-Type","application/json")
@@ -312,7 +312,7 @@ public class NegativeTestcases extends Baseclass {
 	@Test(priority=11)
 	public void BillFetchReqWithoutMobNo() throws InterruptedException {
 		testcase=extentReport.createTest("11. Post - Bill fetch Request without mobile number");
-		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		RestAssured.baseURI = "https://bpapi.com";
 
 		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
 				.basic("public key", "private key").contentType(ContentType.JSON).header("Content-Type","application/json")
@@ -343,7 +343,7 @@ public class NegativeTestcases extends Baseclass {
 	public void BillFetchReqLpgIdWithSapce() throws InterruptedException {
 		testcase=extentReport.createTest("12. Post - Bill fetch Request with invalid LPG Id");
 		String InvalidLpgId="10000000107608599     ";
-		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		RestAssured.baseURI = "https://bpapi.com";
 
 		RequestSpecification httpRequest = RestAssured.given().log().all().auth()
 				.basic("public key", "private key").contentType(ContentType.JSON).header("Content-Type","application/json")
@@ -374,7 +374,7 @@ public class NegativeTestcases extends Baseclass {
 	@Test(priority=13)
 	public void CollectUpiWithInvalidTransId() throws InterruptedException {
 		testcase=extentReport.createTest("13. Post - Collect UPI payment with invalid Transaction Id");
-		RestAssured.baseURI = "https://bpapi.ippopay.com";
+		RestAssured.baseURI = "https://bpapi.com";
 		String Vpa="devibalakrishnan67@okaxis";
 		String InvalidTransactionId="Lm6a0avYODMjL3ZoO3Vg";
 
